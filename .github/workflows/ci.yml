@@ -27,8 +27,12 @@ jobs:
 
       - name: Build solution
         run: |
-          msbuild client/client.sln /p:Configuration=Release /p:OutputPath="client/build"
-          ls client/build  # Перевірити, чи є файли в папці build
+          msbuild client/client.sln /p:Configuration=Release /p:Platform="x64" /p:OutputPath="client/build"
+      - name: Check other directories for exe files
+        run: |
+          ls client/x64/Debug/
+          ls client/x64/Release/
+
 
       - name: Upload Windows binaries
         uses: actions/upload-artifact@v4
