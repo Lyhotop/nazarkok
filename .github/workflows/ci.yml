@@ -26,7 +26,7 @@ jobs:
         run: nuget restore client/client.sln
 
       - name: Build solution
-        run: msbuild client/client.sln /p:Configuration=Release
+        run: msbuild YourProject.sln /p:Configuration=Release /p:OutputPath="clien/build"
 
               # Upload Arduino binaries
       - name: Upload Arduino binaries
