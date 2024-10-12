@@ -15,10 +15,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4  # Updated version
+        uses: actions/checkout@v4  # Завантажити код
 
       - name: Set up Visual Studio
-        uses: microsoft/setup-msbuild@v2  # Updated version
+        uses: microsoft/setup-msbuild@v2  # Налаштувати Visual Studio
         with:
           vs-version: '16.0'
 
@@ -26,25 +26,22 @@ jobs:
         run: nuget restore client/client.sln
 
       - name: Build solution
-        run: msbuild client/client.sln /p:Configuration=Release /p:OutputPath="client/build"
+        run: msbuild client/client.sln /p:Configuration=Release /p:OutputPath="client/build"  # Виправлено шлях до виходу
 
-              # Upload Arduino binaries
-      - name: Upload Arduino binaries
-        uses: actions/upload-artifact@v3
+      # Завантаження .exe файлів
+      - name: Upload Windows binaries
+        uses: actions/upload-artifact@v4  # Оновлено до v4
         with:
           name: windows-binaries
-          path: client/build/*.exe  # Arduino .hex файли
+          path: client/build/*.exe  # Шлях до .exe файлів
 
-  # Job для компіляції Arduino Uno
   build_arduino:
-    runs-on: ubuntu-latest  # Використовуємо Linux для збірки Arduino
+    runs-on: ubuntu-latest  # Використовуємо Linux для компіляції Arduino
 
     steps:
-      # Checkout the repository
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4  # Завантажити код
 
-      # Install Arduino CLI
       - name: Set up Arduino CLI
         run: |
           wget https://downloads.arduino.cc/arduino-cli/arduino-cli_latest_Linux_64bit.tar.gz
@@ -52,29 +49,25 @@ jobs:
           sudo mv arduino-cli /usr/local/bin/
           arduino-cli config init
 
-      # Add Arduino package URL
-      - name: Add Arduino Uno package URL
+      - name: Add Arduino package URL
         run: |
           arduino-cli config set board_manager.additional_urls https://downloads.arduino.cc/packages/package_index.json
 
-      # Install Arduino core for Arduino Uno
       - name: Install Arduino core
         run: |
           arduino-cli core update-index
           arduino-cli core install arduino:avr
 
-      # Compile Arduino Sketch for Arduino Uno
       - name: Compile Arduino Sketch for Uno
         run: |
-          mkdir -p build  # Ensure the build directory exists
+          mkdir -p build  # Переконатися, що директорія для збірки існує
           arduino-cli compile --fqbn arduino:avr:uno --output-dir build server/server.ino
 
-      # Upload Arduino binaries
       - name: Upload Arduino binaries
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4  # Оновлено до v4
         with:
           name: arduino-binaries
-          path: build/*.hex  # Arduino .hex файли
+          path: build/*.hex  # Шлях до .hex файлів
 
   collect_artifacts:
     needs: [build]
@@ -82,11 +75,11 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4  # Updated version
+        uses: actions/checkout@v4  # Завантажити код
 
       - name: Upload executable artifact
-        uses: actions/upload-artifact@v3.1.2
+        uses: actions/upload-artifact@v4  # Оновлено до v4
         with:
           name: winforms-executable
-          path: client/build/*.exe  # Ensure this path is correct
+          path: client/build/*.exe  # Шлях до .exe файлів
           retention-days: 5
