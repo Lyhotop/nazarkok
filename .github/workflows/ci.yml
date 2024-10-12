@@ -67,45 +67,28 @@ jobs:
         with:
           name: arduino-hex
           path: build/*.hex  # Шлях до .hex файлів
+    test:
+      runs-on: windows-latest
+      needs: build_windows  # Залежність від завдання build_windows
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v4  # Завантажити код
 
-  build-and-test:
-    runs-on: windows-latest
-    name: Build and Test C++/CLI App
+        - name: Set up Visual Studio
+          uses: microsoft/setup-msbuild@v2
+          with:
+            vs-version: '16.0'
 
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+        - name: Restore NuGet packages
+          run: nuget restore client/client.sln
 
-    - name: Setup MSBuild
-      uses: microsoft/setup-msbuild@v2
-      with:
-        vs-version: '16.0'  # або іншу версію, яка тобі потрібна
+        - name: Run unit tests
+          run: |
+            msbuild client/client.sln /p:Configuration=Release /p:Platform="x64" /p:RunTests=true > test_results.log; 
+            if %ERRORLEVEL% NEQ 0 exit /b %ERRORLEVEL%
 
-    - name: Restore NuGet packages
-      run: nuget restore client/client.sln
-
-    - name: Build solution
-      run: |
-        msbuild client/client.sln /p:Configuration=Release /p:Platform="x64" /p:OutputPath="client/build" /verbosity:minimal
-
-    - name: Run tests
-      run: |
-        vstest.console.exe client/build/TestsProject.dll --logger:trx --resultsDirectory:./tests/results/cppcli
-
-    - name: Save Test Results
-      run: |
-        $testResultPath = "./tests/results/cppcli/cppcli-app-test-report.trx"
-        Write-Host "Test report saved to: $testResultPath"
-
-    - name: Post Test Report
-      uses: bibipkins/dotnet-test-reporter@v1.4.1
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        comment-title: 'Test Report'
-        results-path: ./tests/results/cppcli/*.trx
-
-    - name: Upload Test Results Artifact
-      uses: actions/upload-artifact@v3.1.2
-      with:
-        name: cppcli-app-test-reports
-        path: ./tests/results/cppcli/*
+        - name: Upload test results
+          uses: actions/upload-artifact@v4
+          with:
+            name: test-results
+            path: test_results.log
