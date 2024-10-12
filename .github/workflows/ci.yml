@@ -69,7 +69,7 @@ jobs:
           path: build/*.hex  # Шлях до .hex файлів
   test:
     runs-on: windows-latest
-    needs: build_windows  # Залежність від завдання build_windows
+   
     steps:
       - name: Checkout code
         uses: actions/checkout@v4  # Завантажити код
