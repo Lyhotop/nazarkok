@@ -43,7 +43,7 @@ jobs:
         with:
           name: winforms-executable
           path: |
-            client/x64/Release/*.exe  # WinForms .exe
+            client/x64/Release/client.exe  # WinForms .exe
           retention-days: 5  # Зберігання артефактів на 5 днів
 
 
