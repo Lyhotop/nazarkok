@@ -67,3 +67,45 @@ jobs:
         with:
           name: arduino-hex
           path: build/*.hex  # Шлях до .hex файлів
+
+  build-and-test:
+    runs-on: windows-latest
+    name: Build and Test C++/CLI App
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v2
+      with:
+        vs-version: '16.0'  # або іншу версію, яка тобі потрібна
+
+    - name: Restore NuGet packages
+      run: nuget restore client/client.sln
+
+    - name: Build solution
+      run: |
+        msbuild client/client.sln /p:Configuration=Release /p:Platform="x64" /p:OutputPath="client/build" /verbosity:minimal
+
+    - name: Run tests
+      run: |
+        vstest.console.exe client/build/TestsProject.dll --logger:trx --resultsDirectory:./tests/results/cppcli
+
+    - name: Save Test Results
+      run: |
+        $testResultPath = "./tests/results/cppcli/cppcli-app-test-report.trx"
+        Write-Host "Test report saved to: $testResultPath"
+
+    - name: Post Test Report
+      uses: bibipkins/dotnet-test-reporter@v1.4.1
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        comment-title: 'Test Report'
+        results-path: ./tests/results/cppcli/*.trx
+
+    - name: Upload Test Results Artifact
+      uses: actions/upload-artifact@v3.1.2
+      with:
+        name: cppcli-app-test-reports
+        path: ./tests/results/cppcli/*
