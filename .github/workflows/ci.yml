@@ -28,6 +28,47 @@ jobs:
       - name: Build solution
         run: msbuild client/client.sln /p:Configuration=Release
 
+  # Job для компіляції Arduino Uno
+  build_arduino:
+    runs-on: ubuntu-latest  # Використовуємо Linux для збірки Arduino
+
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Install Arduino CLI
+      - name: Set up Arduino CLI
+        run: |
+          wget https://downloads.arduino.cc/arduino-cli/arduino-cli_latest_Linux_64bit.tar.gz
+          tar -xzf arduino-cli_latest_Linux_64bit.tar.gz
+          sudo mv arduino-cli /usr/local/bin/
+          arduino-cli config init
+
+      # Add Arduino package URL
+      - name: Add Arduino Uno package URL
+        run: |
+          arduino-cli config set board_manager.additional_urls https://downloads.arduino.cc/packages/package_index.json
+
+      # Install Arduino core for Arduino Uno
+      - name: Install Arduino core
+        run: |
+          arduino-cli core update-index
+          arduino-cli core install arduino:avr
+
+      # Compile Arduino Sketch for Arduino Uno
+      - name: Compile Arduino Sketch for Uno
+        run: |
+          mkdir -p build  # Ensure the build directory exists
+          arduino-cli compile --fqbn arduino:avr:uno --output-dir build server/server.ino
+
+      # Upload Arduino binaries
+      - name: Upload Arduino binaries
+        uses: actions/upload-artifact@v3
+        with:
+          name: arduino-binaries
+          path: build/*.hex  # Arduino .hex файли
+          
   collect_artifacts:
     needs: [build]
     runs-on: windows-latest
