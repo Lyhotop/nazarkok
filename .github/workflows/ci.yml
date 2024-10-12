@@ -36,12 +36,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4  # Updated version
 
-      - name: List files in Release directory
-        run: dir D:\a\nazarkok\nazarkok\client\x64\Release\
-
       - name: Upload executable artifact
         uses: actions/upload-artifact@v3.1.2
         with:
           name: winforms-executable
-          path: D:\a\nazarkok\nazarkok\client\x64\Release\client.exe  # Ensure this path is correct
+          path: client\x64\Release\client.exe  # Ensure this path is correct
           retention-days: 5
