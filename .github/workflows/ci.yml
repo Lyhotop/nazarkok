@@ -18,7 +18,7 @@ jobs:
         uses: actions/checkout@v4  # Updated version
 
       - name: Set up Visual Studio
-        uses: microsoft/setup-msbuild@v2  # Updated version
+        uses: microsoft/setup-msbuild@v4  # Updated version
         with:
           vs-version: '16.0'
 
@@ -30,10 +30,10 @@ jobs:
 
               # Upload Arduino binaries
       - name: Upload Arduino binaries
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: windows-binaries
-          path: build/*.exe  # Arduino .hex файли
+          path: client/build/*.exe  # Arduino .hex файли
 
   # Job для компіляції Arduino Uno
   build_arduino:
@@ -42,7 +42,7 @@ jobs:
     steps:
       # Checkout the repository
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # Install Arduino CLI
       - name: Set up Arduino CLI
@@ -71,7 +71,7 @@ jobs:
 
       # Upload Arduino binaries
       - name: Upload Arduino binaries
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: arduino-binaries
           path: build/*.hex  # Arduino .hex файли
