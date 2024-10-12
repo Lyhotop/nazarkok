@@ -67,28 +67,28 @@ jobs:
         with:
           name: arduino-hex
           path: build/*.hex  # Шлях до .hex файлів
-    test:
-      runs-on: windows-latest
-      needs: build_windows  # Залежність від завдання build_windows
-      steps:
-        - name: Checkout code
-          uses: actions/checkout@v4  # Завантажити код
+  test:
+    runs-on: windows-latest
+    needs: build_windows  # Залежність від завдання build_windows
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4  # Завантажити код
 
-        - name: Set up Visual Studio
-          uses: microsoft/setup-msbuild@v2
-          with:
-            vs-version: '16.0'
+      - name: Set up Visual Studio
+        uses: microsoft/setup-msbuild@v2
+        with:
+          vs-version: '16.0'
 
-        - name: Restore NuGet packages
-          run: nuget restore client/client.sln
+      - name: Restore NuGet packages
+        run: nuget restore client/client.sln
 
-        - name: Run unit tests
-          run: |
-            msbuild client/client.sln /p:Configuration=Release /p:Platform="x64" /p:RunTests=true > test_results.log; 
-            if %ERRORLEVEL% NEQ 0 exit /b %ERRORLEVEL%
+      - name: Run unit tests
+        run: |
+          msbuild client/client.sln /p:Configuration=Release /p:Platform="x64" /p:RunTests=true > test_results.log; 
+          if %ERRORLEVEL% NEQ 0 exit /b %ERRORLEVEL%
 
-        - name: Upload test results
-          uses: actions/upload-artifact@v4
-          with:
-            name: test-results
-            path: test_results.log
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: test_results.log
