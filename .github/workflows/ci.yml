@@ -43,7 +43,7 @@ jobs:
         with:
           name: all-artifacts
           path: |
-            build/*.exe  # WinForms .exe
+            client/x64/Debug/*.exe  # WinForms .exe
           retention-days: 5  # Зберігання артефактів на 5 днів
 
 
