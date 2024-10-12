@@ -40,5 +40,5 @@ jobs:
         uses: actions/upload-artifact@v3.1.2
         with:
           name: winforms-executable
-          path: client\x64\Release\client.exe  # Ensure this path is correct
+          path: client/x64/Release/client.exe  # Ensure this path is correct
           retention-days: 5
