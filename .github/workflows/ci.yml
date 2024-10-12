@@ -30,7 +30,6 @@ jobs:
           msbuild client/client.sln /p:Configuration=Release /p:Platform="x64" /p:OutputPath="client/build"
       - name: Check other directories for exe files
         run: |
-          ls client/x64/Debug/
           ls client/x64/Release/
 
 
