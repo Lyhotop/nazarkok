@@ -10,7 +10,7 @@ on:
       - develop
 
 jobs:
-    build_winforms:
+  build_winforms:
     runs-on: windows-latest
 
     steps:
