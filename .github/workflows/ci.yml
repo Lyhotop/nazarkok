@@ -15,10 +15,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4  # Updated version
 
       - name: Set up Visual Studio
-        uses: microsoft/setup-msbuild@v1
+        uses: microsoft/setup-msbuild@v2  # Updated version
         with:
           vs-version: '16.0'
 
@@ -34,13 +34,14 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4  # Updated version
 
-      
+      - name: List files in Release directory
+        run: dir D:\a\nazarkok\nazarkok\client\x64\Release\
+
       - name: Upload executable artifact
         uses: actions/upload-artifact@v3
         with:
           name: winforms-executable
-          path: |
-            D:\a\nazarkok\nazarkok\client\x64\Release\client.exe  # Вказуйте повний шлях
+          path: D:\a\nazarkok\nazarkok\client\x64\Release\client.exe  # Ensure this path is correct
           retention-days: 5
