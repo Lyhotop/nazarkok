@@ -1,4 +1,6 @@
-name:  nazarkok
+
+
+name: nazarkok
 
 on:
   push:
@@ -18,14 +20,19 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Set up Visual Studio
-        uses: actions/setup-msbuild@v1
+        uses: actions/setup-dotnet@v3
         with:
-          vs-version: 'latest'
+          dotnet-version: '7.0.x' # Змініть версію .NET за необхідності
+
+      - name: Install Visual Studio Build Tools
+        run: |
+          choco install visualstudio2019buildtools --version=16.9.4 --params "/NoAddins /NoWeb /NoComponent" -y
+          choco install visualstudio2019-workload-vctools -y
 
       - name: Restore NuGet packages
-        run: nuget restore client.sln
+        run: nuget restore clinet.sln
 
       - name: Build solution
         run: msbuild clinet.sln /p:Configuration=Release
 
-
+  
