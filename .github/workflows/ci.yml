@@ -25,7 +25,8 @@ jobs:
         run: nuget restore client/client.sln
 
       - name: gtest
-        run:  nuget install gtest
+        run:  nuget install gtest -Version 1.11.0
+
        
 
 
