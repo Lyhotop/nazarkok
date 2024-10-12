@@ -24,6 +24,11 @@ jobs:
       - name: Restore NuGet packages
         run: nuget restore client/client.sln
 
+      - name: gtest
+        run:  nuget install gtest
+       
+
+
       - name: Build solution
         run: |
           msbuild client/client.sln /p:Configuration=Release /p:Platform="x64" /p:OutputPath="client/build"
