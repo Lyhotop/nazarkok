@@ -30,7 +30,7 @@ jobs:
 
   collect_artifacts:
     needs: [build]  # Виконується після завершення обох завдань
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
       # Checkout code (якщо необхідно)
