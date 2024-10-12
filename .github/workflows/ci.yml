@@ -37,7 +37,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: windows-binaries
-          path: client/build/*.exe
+          path: client/x64/Release/*.exe
 
   build_arduino:
     runs-on: ubuntu-latest  # Використовуємо Linux для компіляції Arduino
