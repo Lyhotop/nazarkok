@@ -10,8 +10,8 @@ on:
       - develop
 
 jobs:
-  build_winforms:
-    runs-on: windows-latest  # Використовуємо Windows для збірки WinForms
+    build_winforms:
+    runs-on: windows-latest
 
     steps:
       - name: Checkout code
@@ -19,6 +19,9 @@ jobs:
 
       - name: Set up MSBuild
         uses: microsoft/setup-msbuild@v1.1.2
+
+      - name: Show MSBuild version
+        run: msbuild.exe -version  # Додано для перевірки версії
 
       - name: Build C++/CLI project
         run: |
@@ -31,13 +34,14 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: winforms-binaries
-          path: build/*.exe  # Шлях до скомпільованих .exe файлів
+          path: build/*.exe
 
       - name: Upload WinForms test reports
         uses: actions/upload-artifact@v3
         with:
           name: winforms-test-reports
           path: test-reports/*.trx
+
 
   build_arduino:
     runs-on: ubuntu-latest  # Використовуємо Linux для збірки Arduino
