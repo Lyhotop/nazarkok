@@ -26,14 +26,15 @@ jobs:
         run: nuget restore client/client.sln
 
       - name: Build solution
-        run: msbuild client/client.sln /p:Configuration=Release /p:OutputPath="client/build"  # Виправлено шлях до виходу
+        run: |
+          msbuild client/client.sln /p:Configuration=Release /p:OutputPath="client/build"
+        ls client/build  # Перевірити, чи є файли в папці build
 
-      # Завантаження .exe файлів
       - name: Upload Windows binaries
-        uses: actions/upload-artifact@v4  # Оновлено до v4
+        uses: actions/upload-artifact@v4
         with:
           name: windows-binaries
-          path: client/build/*.exe  # Шлях до .exe файлів
+          path: client/build/*.exe
 
   build_arduino:
     runs-on: ubuntu-latest  # Використовуємо Linux для компіляції Arduino
