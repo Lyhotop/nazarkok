@@ -26,8 +26,10 @@ jobs:
 
       - name: Build solution
         run: msbuild client/client.sln /p:Configuration=Release  # Заміна на ім'я вашого рішення
+        
       - name: Move executable to build folder
         run: |
           mkdir build
-          move /Y "client/x64/Debug/*.exe" build/  # Заміна на фактичний шлях до вашого .exe файлу
+          Move-Item -Path "client/x64/Debug/*.exe" -Destination "build/" -Force  # Заміна на фактичний шлях до вашого .exe файлу
+
 
