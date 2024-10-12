@@ -47,10 +47,3 @@ TEST(SerialPortTests, ReadMessage_ValidHandle_ReadsMessage) {
     CloseHandle(hSerial);
 }
 
-// Основна функція для запуску тестів
-int main(int argc, char** argv) {
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
-}
-
-
