@@ -33,7 +33,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: winforms-binaries
-          path: client/*.exe  # Шлях до скомпільованих .exe файлів
+          path: build/*.exe  # Шлях до скомпільованих .exe файлів
 
       # Upload test reports (WinForms тестові звіти)
       - name: Upload WinForms test reports
@@ -99,6 +99,6 @@ jobs:
         with:
           name: all-artifacts
           path: |
-            client/*.exe  # WinForms .exe
+            build/*.exe  # WinForms .exe
             build/*.hex  # Arduino .hex
           retention-days: 5  # Зберігання артефактів на 5 днів
