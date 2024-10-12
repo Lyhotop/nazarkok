@@ -10,48 +10,42 @@ on:
       - develop
 
 jobs:
-  # Job для збірки C++/CLI WinForms проекту
   build_winforms:
     runs-on: windows-latest  # Використовуємо Windows для збірки WinForms
 
     steps:
-      # Checkout the repository
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Set up MSBuild (для C++/CLI)
       - name: Set up MSBuild
         uses: microsoft/setup-msbuild@v1.1.2
 
-      # Build WinForms C++/CLI project
       - name: Build C++/CLI project
         run: |
           msbuild.exe client/client.sln /p:Configuration=Release
 
-      # Upload WinForms binaries
+      - name: List build directory
+        run: dir build  # Перевіряємо, що є у каталозі build
+
       - name: Upload WinForms binaries
         uses: actions/upload-artifact@v3
         with:
           name: winforms-binaries
           path: build/*.exe  # Шлях до скомпільованих .exe файлів
 
-      # Upload test reports (WinForms тестові звіти)
       - name: Upload WinForms test reports
         uses: actions/upload-artifact@v3
         with:
           name: winforms-test-reports
           path: test-reports/*.trx
 
-  # Job для компіляції Arduino Uno
   build_arduino:
     runs-on: ubuntu-latest  # Використовуємо Linux для збірки Arduino
 
     steps:
-      # Checkout the repository
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Install Arduino CLI
       - name: Set up Arduino CLI
         run: |
           wget https://downloads.arduino.cc/arduino-cli/arduino-cli_latest_Linux_64bit.tar.gz
@@ -59,41 +53,37 @@ jobs:
           sudo mv arduino-cli /usr/local/bin/
           arduino-cli config init
 
-      # Add Arduino package URL
       - name: Add Arduino Uno package URL
         run: |
           arduino-cli config set board_manager.additional_urls https://downloads.arduino.cc/packages/package_index.json
 
-      # Install Arduino core for Arduino Uno
       - name: Install Arduino core
         run: |
           arduino-cli core update-index
           arduino-cli core install arduino:avr
 
-      # Compile Arduino Sketch for Arduino Uno
       - name: Compile Arduino Sketch for Uno
         run: |
-          mkdir -p build  # Ensure the build directory exists
+          mkdir -p build  # Створюємо каталог build, якщо він не існує
           arduino-cli compile --fqbn arduino:avr:uno --output-dir build server/server.ino
 
-      # Upload Arduino binaries
+      - name: List build directory
+        run: ls build  # Перевіряємо, що є у каталозі build
+
       - name: Upload Arduino binaries
         uses: actions/upload-artifact@v3
         with:
           name: arduino-binaries
           path: build/*.hex  # Arduino .hex файли
 
-  # Колекція артефактів після обох збірок
   collect_artifacts:
     needs: [build_winforms, build_arduino]  # Виконується після завершення обох завдань
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout code (якщо необхідно)
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Upload both WinForms and Arduino artifacts
       - name: Upload all artifacts
         uses: actions/upload-artifact@v3
         with:
