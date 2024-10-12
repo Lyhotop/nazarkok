@@ -14,7 +14,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3  # Оновлено до v3
 
       - name: Set up Visual Studio
         uses: microsoft/setup-msbuild@v1
@@ -27,7 +27,6 @@ jobs:
       - name: Build solution
         run: msbuild client/client.sln /p:Configuration=Release  # Заміна на ім'я вашого рішення
 
-
   collect_artifacts:
     needs: [build]  # Виконується після завершення обох завдань
     runs-on: windows-latest
@@ -35,15 +34,13 @@ jobs:
     steps:
       # Checkout code (якщо необхідно)
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3  # Оновлено до v3
 
       # Upload both WinForms and Arduino artifacts
       - name: Upload executable artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v3  # Оновлено до v3
         with:
           name: winforms-executable
           path: |
             client/x64/Release/client.exe  # WinForms .exe
           retention-days: 5  # Зберігання артефактів на 5 днів
-
-
