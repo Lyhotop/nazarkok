@@ -19,7 +19,7 @@ jobs:
       - name: Set up Visual Studio
         uses: microsoft/setup-msbuild@v1
         with:
-          vs-version: '22.0'  # Задайте версію Visual Studio, яку ви використовуєте
+          vs-version: '16.0'  # Задайте версію Visual Studio, яку ви використовуєте
 
       - name: Restore NuGet packages
         run: nuget restore client.sln  # Заміна на ім'я вашого рішення
