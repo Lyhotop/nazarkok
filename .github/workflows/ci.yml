@@ -22,7 +22,7 @@ jobs:
           vs-version: '16.0'  # Задайте версію Visual Studio, яку ви використовуєте
 
       - name: Restore NuGet packages
-        run: nuget restore client.sln  # Заміна на ім'я вашого рішення
+        run: nuget restore client/client.sln  # Заміна на ім'я вашого рішення
 
       - name: Build solution
-        run: msbuild client.sln /p:Configuration=Release  # Заміна на ім'я вашого рішення
+        run: msbuild client/client.sln /p:Configuration=Release  # Заміна на ім'я вашого рішення
