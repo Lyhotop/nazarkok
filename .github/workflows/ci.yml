@@ -10,7 +10,7 @@ on:
       - develop
 
 jobs:
-  build-windows:
+  build_windows:
     runs-on: windows-latest
     steps:
       - name: Checkout code
