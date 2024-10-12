@@ -1,4 +1,4 @@
-name: nazarkok
+name: TicTacToeSW_HW
 
 on:
   push:
@@ -10,9 +10,8 @@ on:
       - develop
 
 jobs:
-  build:
+  build-windows:
     runs-on: windows-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4  # Завантажити код
@@ -28,15 +27,11 @@ jobs:
       - name: Build solution
         run: |
           msbuild client/client.sln /p:Configuration=Release /p:Platform="x64" /p:OutputPath="client/build"
-      - name: Check other directories for exe files
-        run: |
-          ls client/x64/Release/
-
 
       - name: Upload Windows binaries
         uses: actions/upload-artifact@v4
         with:
-          name: windows-binaries
+          name: windows-exe
           path: client/x64/Release/*.exe
 
   build_arduino:
@@ -70,20 +65,5 @@ jobs:
       - name: Upload Arduino binaries
         uses: actions/upload-artifact@v4  # Оновлено до v4
         with:
-          name: arduino-binaries
+          name: arduino-hex
           path: build/*.hex  # Шлях до .hex файлів
-
-  collect_artifacts:
-    needs: [build]
-    runs-on: windows-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4  # Завантажити код
-
-      - name: Upload executable artifact
-        uses: actions/upload-artifact@v4  # Оновлено до v4
-        with:
-          name: winforms-executable
-          path: client/build/*.exe  # Шлях до .exe файлів
-          retention-days: 5
